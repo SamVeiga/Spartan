@@ -13,7 +13,7 @@ from collections import defaultdict
 
 # 🛡️ --- CONFIGURAÇÕES DO BOT ---
 TOKEN = '8307062095:AAE3RbmLV5p7brAPJNkDL-0nO79ejKib8Eg'
-ID_GRUPO = -1002363575666
+ID_GRUPO = -1002606951329
 ID_DONO = 1481389775
 
 # 🌍 Fuso horário de Brasília
