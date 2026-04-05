@@ -117,7 +117,7 @@ def detectar_cade_samuel(msg):
 
 def detectar_risadas(msg):
     texto = (msg.text or '').lower()
-    if re.search(r"(kkk+|haha+h+|rsrs+|hehe+)", texto):
+    if re.search(r"(kkk+|haha+h+|rsrs+|hehe+|xau|bay|tchau|adeus|fui|partiu|mds|chato|credo|xii|hein|nossa|morri|triste|medroso|covarde|não sei|eu não|vai)", texto):
         if random.random() > 0.3:  # Apenas 30% de chance de responder
             return
         sticks = carregar_json(ARQUIVOS_JSON["sticks_risadas"])
