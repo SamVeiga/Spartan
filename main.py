@@ -115,15 +115,48 @@ def detectar_cade_samuel(msg):
         resposta = escolher_frase(frases).replace("{nome}", nome)
         responder_com_atraso(bot.reply_to, msg, resposta)
 
-def detectar_risadas(msg):
+def detectar_gatilhos_especiais(msg):
+    """
+    Detecta risadas, insultos e despedidas, respondendo com a 
+    arrogância necessária de um Original.
+    """
     texto = (msg.text or '').lower()
+    chat_id = msg.chat.id
 
-    if re.search(r"(kkk+|haha+h+|rsrs+|hehe+)", texto):
-        if random.random() > 0.3:  # Apenas 30% de chance de responder
-            return
-        sticks = carregar_json(ARQUIVOS_JSON["sticks_risadas"])
-        if sticks:
-            responder_com_atraso(bot.send_sticker, msg.chat.id, random.choice(sticks), delay=5)
+    # 1. Definição dos Grupos de Gatilhos (Regex)
+    gatilhos = {
+        "risadas": r"(kkk+|haha+h+|rsrs+|hehe+|huahu+)",
+        "despedida": r"(xau|bay|tchau|adeus|fui|partiu)",
+        "insultos_chato": r"(mds|chato|credo|xii|hein|ain|nossa)",
+        "drama_medo": r"(morri|triste|medroso|covarde|não sei|eu não|vai)"
+    }
+
+    # 2. Lógica de Detecção e Resposta
+    for categoria, padrao in gatilhos.items():
+        if re.search(padrao, texto):
+            
+            # Probabilidade de 30% para não inundar o chat (Klaus não implora por atenção)
+            if random.random() > 0.3:
+                return
+
+            # Busca o arquivo JSON correspondente à categoria detectada
+            # Certifique-se de ter esses nomes no seu dicionário ARQUIVOS_JSON
+            caminho_json = ARQUIVOS_JSON.get(f"sticks_{categoria}")
+            
+            if caminho_json:
+                sticks = carregar_json(caminho_json)
+                if sticks:
+                    sticker_escolhido = random.choice(sticks)
+                    
+                    # Responde com o luxo de um atraso de 5 segundos
+                    responder_com_atraso(
+                        bot.send_sticker, 
+                        chat_id, 
+                        sticker_escolhido, 
+                        delay=5,
+                        reply_to_message_id=msg.message_id
+                    )
+            break # Para após encontrar o primeiro gatilho
 
 def detectar_madrugada(msg):
     hora = agora_brasilia().hour
